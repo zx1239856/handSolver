@@ -32,13 +32,13 @@ import matplotlib
 from matplotlib import pyplot as plt
 
 
+# input image dimensions
+img_rows, img_cols = 200, 200
 
 # number of channels
 # For grayscale use 1 value and for color images use 3 (R,G,B channels)
 img_channels = 1
 
-img_rows = 200
-img_cols = 200
 
 # Batch_size to train
 batch_size = 32
@@ -46,13 +46,13 @@ batch_size = 32
 ## Number of output classes (change it accordingly)
 ## eg: In my case I wanted to predict 4 types of gestures (Ok, Peace, Punch, Stop)
 ## NOTE: If you change this then dont forget to change Labels accordingly
-nb_classes = 5
+nb_classes = 4
 
 # Number of epochs to train (change it accordingly)
-nb_epoch = 15  #25
+nb_epoch = 20  #25
 
 # Total number of convolutional filters to use
-nb_filters = 32
+nb_filters = 64
 # Max pooling
 nb_pool = 2
 # Size of convolution kernel
@@ -69,7 +69,7 @@ path2 = './imgfolder_b'
 WeightFileName = ["ori_4015imgs_weights.hdf5","bw_4015imgs_weights.hdf5","bw_2510imgs_weights.hdf5","./bw_weight.hdf5","./final_c_weights.hdf5","./semiVgg_1_weights.hdf5","/new_wt_dropout20.hdf5","./weights-CNN-gesture_skinmask.hdf5"]
 
 # outputs
-output = ["OK", "NOTHING","PEACE", "PUNCH", "STOP"]
+output = ["BLESS","NORMAL","OK","PUNCH"]
 #output = ["PEACE", "STOP", "THUMBSDOWN", "THUMBSUP"]
 
 
@@ -180,10 +180,11 @@ def loadCNN(wf_index):
     return model
 
 # This function does the guessing work based on input images
-def guessGesture(model, _img):
+def guessGesture(model, img):
     global output, get_output
     #Load image and flatten it
-    image = np.array(_img).flatten()
+    image = np.array(img).flatten()
+    
     # reshape it
     image = image.reshape(img_channels, img_rows,img_cols)
     
@@ -216,7 +217,7 @@ def guessGesture(model, _img):
     guess = max(d.iteritems(), key=operator.itemgetter(1))[0]
     prob  = d[guess]
 
-    if prob > 70.0:
+    if prob > 95.0:
         #print guess + "  Probability: ", prob
 
         #Enable this to save the predictions in a json file,

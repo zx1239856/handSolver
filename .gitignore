@@ -93,3 +93,5 @@ ENV/
 model-checkpoint/
 train/
 dataset/
+hand_dataset/
+
